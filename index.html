@@ -4,129 +4,97 @@
     <base target="_top">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wholesale Product Portal</title>
+    <title>Wholesale Product Portal | Lord & Taylor Partnership</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/U4WPjmA.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script>
-        // Tailwind CSS dark mode configuration
         tailwind.config = {
             darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            gold: '#C5A059'
+                        }
+                    }
+                }
+            }
         }
     </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Animated gradient for dark mode */
-        .dark body {
-            background: linear-gradient(-45deg, #111827, #1f2937, #374151, #4b5563);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+        body { background-color: #f8fafc; }
+        .dark body { background: radial-gradient(circle at top left, #1e293b, #0f172a); background-attachment: fixed; }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Basic background for light mode */
-        body {
-            background-color: #f3f4f6; /* gray-100 */
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #334155; }
 
         .loader {
-            border: 4px solid #d1d5db; /* gray-300 */
-            border-top: 4px solid #4f46e5; /* indigo-600 */
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #C5A059;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-        .dark .loader {
-            border-color: #4a5568;
-            border-top-color: #6366f1;
+            width: 24px;
+            height: 24px;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Shimmer Skeleton Loader */
-        .skeleton-card {
-            background-color: #f3f4f6; /* gray-100 */
-            border-radius: 0.75rem; /* rounded-xl */
-            overflow: hidden;
-            border: 1px solid #e5e7eb; /* gray-200 */
-            position: relative;
+        .shimmer-bg {
+            background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.05), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite linear;
         }
-        .dark .skeleton-card {
-            background-color: #1f2937;
-            border-color: #374151;
-        }
+        @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 
-        .shimmer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.05), transparent);
-            animation: shimmer-animation 1.5s infinite;
-        }
-        .dark .shimmer {
-             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-        }
-
-        @keyframes shimmer-animation {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        .skeleton-image { background-color: #e5e7eb; height: 12rem; }
-        .skeleton-text { background-color: #e5e7eb; height: 1rem; margin-bottom: 0.5rem; border-radius: 0.25rem; }
-        .dark .skeleton-image, .dark .skeleton-text { background-color: #374151; }
-
-        /* Card Fade-in Animation */
-        .result-card {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: card-fade-in 0.5s forwards;
-        }
-        @keyframes card-fade-in { to { opacity: 1; transform: translateY(0); } }
+        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.1); }
         
         pre {
-            overflow-x: auto;
-            border-radius: 0.5rem;
-            padding: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: #C5A059 transparent;
         }
-
-        /* Custom scrollbar for filter panel */
-        .filter-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .filter-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .filter-scrollbar::-webkit-scrollbar-thumb {
-            background: #a5b4fc; /* indigo-300 */
-            border-radius: 3px;
-        }
-        .dark .filter-scrollbar::-webkit-scrollbar-thumb {
-            background: #4338ca; /* indigo-800 */
-        }
-
     </style>
 </head>
 <body>
     <div id="root"></div>
 
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
@@ -135,7 +103,6 @@
         const { useState, useEffect, useCallback, useMemo } = React;
         const { createRoot } = ReactDOM;
 
-        // --- Firebase Configuration ---
         const firebaseConfig = {
             apiKey: "AIzaSyChZy873hQS6scR96wptnAw7fvjQC4Jmy4",
             authDomain: "lordtaylor-wholesale-portal.firebaseapp.com",
@@ -145,79 +112,62 @@
             appId: "1:975989212115:web:5b088a0e647c12d9b2e526"
         };
 
-        // --- Initialize Firebase ---
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
         const productsCollection = db.collection("products");
 
-        // --- Icons ---
-        const SunIcon = () => (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-        );
-
-        const MoonIcon = () => (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-            </svg>
-        );
+        const SunIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>;
+        const MoonIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>;
+        const DatabaseIcon = () => <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>;
+        const CodeIcon = () => <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>;
+        const KeyIcon = () => <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H5v-2H3v-2H1v-4a6 6 0 016-6h7a2 2 0 012 2z" /></svg>;
         
-        const DatabaseIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>;
-        const CodeIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>;
-        const KeyIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H5v-2H3v-2H1v-4a6 6 0 016-6h7a2 2 0 012 2z" /></svg>;
+        const EyeIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>;
+        const EyeOffIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" /></svg>;
+        const CopyIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>;
 
-        // --- Header Component ---
         function Header({ user, activeTab, setActiveTab, onLogout, theme, setTheme }) {
             const navItems = [
-                { id: 'database', label: 'Product Database', icon: <DatabaseIcon /> },
-                { id: 'api_docs', label: 'API Documentation', icon: <CodeIcon /> },
-                { id: 'api_key', label: 'Manage API Key', icon: <KeyIcon /> },
+                { id: 'database', label: 'Inventory', icon: <DatabaseIcon /> },
+                { id: 'api_docs', label: 'Documentation', icon: <CodeIcon /> },
+                { id: 'api_key', label: 'API Access', icon: <KeyIcon /> },
             ];
 
             return (
-                <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg sticky top-0 z-40 border-b border-gray-200 dark:border-gray-700">
-                    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="flex items-center justify-between h-16">
-                            <div className="flex items-center space-x-4">
-                                <img src="https://i.imgur.com/GQya5pg.png" alt="Logo" className="h-10"/>
-                                <h1 className="text-xl font-bold text-gray-900 dark:text-white hidden sm:block">Wholesale Portal</h1>
-                            </div>
-                            <div className="hidden md:block">
-                                <div className="flex items-baseline space-x-4">
-                                    {navItems.map(item => (
-                                        <button 
-                                            key={item.id}
-                                            onClick={() => setActiveTab(item.id)} 
-                                            className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${activeTab === item.id ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200/50 dark:hover:bg-gray-700/50'}`}
-                                        >
-                                            {item.icon}
-                                            {item.label}
-                                        </button>
-                                    ))}
+                <header className="glass sticky top-0 z-40 border-b border-brand-200/50 dark:border-brand-800/50">
+                    <div className="max-w-[1600px] mx-auto px-4 lg:px-8">
+                        <div className="flex items-center justify-between h-20">
+                            <div className="flex items-center space-x-4 lg:space-x-6">
+                                <img src="https://i.imgur.com/GQya5pg.png" alt="L&T Logo" className="h-10 lg:h-12 w-auto object-contain" />
+                                <div className="flex flex-col">
+                                    <h1 className="text-md lg:text-lg font-bold text-brand-900 dark:text-white leading-tight">Wholesale Portal</h1>
+                                    <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-gold">Lord & Taylor Partnership</p>
                                 </div>
                             </div>
-                            <div className="flex items-center space-x-3">
-                                <span className="text-gray-500 dark:text-gray-400 text-sm hidden lg:block">{user.email}</span>
-                                <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                                    {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
-                                </button>
-                                <button onClick={onLogout} className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">Logout</button>
-                            </div>
-                        </div>
-                         <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
-                            <div className="pt-2 pb-3 space-x-2 text-center">
-                               {navItems.map(item => (
+                            
+                            <nav className="hidden md:flex items-center space-x-1">
+                                {navItems.map(item => (
                                     <button 
                                         key={item.id}
                                         onClick={() => setActiveTab(item.id)} 
-                                        className={`inline-flex items-center px-3 py-2 rounded-md text-xs font-medium transition-colors ${activeTab === item.id ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200/50 dark:hover:bg-gray-700/50'}`}
+                                        className={`flex items-center px-4 py-2 rounded-xl text-sm font-bold transition-all ${activeTab === item.id ? 'bg-brand-900 dark:bg-brand-gold text-white dark:text-brand-900 shadow-md' : 'text-brand-500 hover:bg-brand-100 dark:hover:bg-brand-800'}`}
                                     >
                                         {item.icon}
-                                        <span className="sr-only">{item.label}</span>
+                                        {item.label}
                                     </button>
                                 ))}
+                            </nav>
+
+                            <div className="flex items-center space-x-3">
+                                <div className="hidden lg:flex flex-col items-end mr-2">
+                                    <span className="text-[10px] uppercase font-bold text-brand-gold tracking-tighter">Partner User</span>
+                                    <span className="text-xs font-bold text-brand-900 dark:text-brand-200">{user.email.split('@')[0]}</span>
+                                </div>
+                                <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="p-2 rounded-full border border-brand-200 dark:border-brand-800 text-brand-600 dark:text-brand-400 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors">
+                                    {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+                                </button>
+                                <button onClick={onLogout} className="px-4 py-2 text-sm font-bold text-white bg-brand-900 dark:bg-brand-700 rounded-xl hover:opacity-90 transition-all">Logout</button>
                             </div>
                         </div>
                     </div>
@@ -225,7 +175,24 @@
             );
         }
 
-        // --- Main App Component ---
+        function MobileNav({ activeTab, setActiveTab }) {
+            const navItems = [
+                { id: 'database', label: 'Catalog', icon: <DatabaseIcon /> },
+                { id: 'api_docs', label: 'Docs', icon: <CodeIcon /> },
+                { id: 'api_key', label: 'API', icon: <KeyIcon /> },
+            ];
+            return (
+                <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 glass rounded-2xl shadow-2xl p-1.5 flex gap-1 border border-white/20">
+                    {navItems.map(item => (
+                        <button key={item.id} onClick={() => setActiveTab(item.id)} className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest flex flex-col items-center gap-1 transition-all ${activeTab === item.id ? 'bg-brand-900 text-white' : 'text-brand-500'}`}>
+                            {React.cloneElement(item.icon, { className: "h-5 w-5 mr-0" })}
+                            {item.label}
+                        </button>
+                    ))}
+                </div>
+            );
+        }
+
         function App() {
             const [user, setUser] = useState(null);
             const [loading, setLoading] = useState(true);
@@ -241,653 +208,263 @@
             }, []);
             
             useEffect(() => {
-                if (theme === 'dark') {
-                    document.documentElement.classList.add('dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                }
+                document.documentElement.classList.toggle('dark', theme === 'dark');
             }, [theme]);
 
-            const handleLogout = async () => {
-                await auth.signOut();
-                setUser(null);
-                setActiveTab('database');
-            };
-
-            if (loading) {
-                return (
-                    <div className="flex items-center justify-center min-h-screen">
-                        <div className="loader"></div>
-                    </div>
-                );
-            }
+            if (loading) return (
+                <div className="flex items-center justify-center min-h-screen bg-brand-50 dark:bg-brand-900">
+                    <div className="loader"></div>
+                </div>
+            );
 
             return (
-                <div className="min-h-screen bg-gray-100 dark:bg-transparent text-gray-800 dark:text-gray-200">
+                <div className="min-h-screen pb-24 md:pb-0">
                     {user ? (
                         <>
-                            <Header 
-                                user={user} 
-                                activeTab={activeTab}
-                                setActiveTab={setActiveTab}
-                                onLogout={handleLogout}
-                                theme={theme}
-                                setTheme={setTheme}
-                            />
-                            <main>
-                                <div className={`py-8 px-4 sm:px-6 lg:px-8 ${activeTab !== 'database' ? 'container mx-auto' : ''}`}>
-                                    {activeTab === 'database' && <ProductDatabase />}
-                                    {activeTab === 'api_docs' && <ApiDocs />}
-                                    {activeTab === 'api_key' && <ApiKeyManager user={user} />}
-                                </div>
+                            <Header user={user} activeTab={activeTab} setActiveTab={setActiveTab} onLogout={() => auth.signOut()} theme={theme} setTheme={setTheme} />
+                            <main className="max-w-[1600px] mx-auto py-6 lg:py-8 px-4 lg:px-8">
+                                {activeTab === 'database' && <ProductDatabase />}
+                                {activeTab === 'api_docs' && <ApiDocs />}
+                                {activeTab === 'api_key' && <ApiKeyManager user={user} />}
                             </main>
+                            <MobileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                         </>
-                    ) : (
-                        <AuthComponent />
-                    )}
+                    ) : <AuthComponent />}
                 </div>
             );
         }
 
-        // --- Authentication Component (omitted for brevity, same as original) ---
         function AuthComponent() {
             const [isLogin, setIsLogin] = useState(true);
             const [email, setEmail] = useState('');
             const [password, setPassword] = useState('');
             const [error, setError] = useState('');
-            const [message, setMessage] = useState('');
             const [loading, setLoading] = useState(false);
-            const [loginStatus, setLoginStatus] = useState('idle'); // idle, pending, success, error
-            const [showReset, setShowReset] = useState(false);
-
-            const handlePasswordReset = async (e) => {
-                e.preventDefault();
-                if (!email) {
-                    setError("Please enter your email address to reset the password.");
-                    return;
-                }
-                setLoading(true);
-                try {
-                    await auth.sendPasswordResetEmail(email);
-                    setMessage("Password reset email sent! Please check your inbox.");
-                    setError('');
-                    setShowReset(false);
-                } catch (err) {
-                    setError(err.message);
-                    setMessage('');
-                } finally {
-                    setLoading(false);
-                }
-            };
 
             const handleSubmit = async (e) => {
                 e.preventDefault();
                 setLoading(true);
-                setLoginStatus('pending');
                 setError('');
-                setMessage('');
-
                 try {
                     if (isLogin) {
                         await auth.signInWithEmailAndPassword(email, password);
-                        setLoginStatus('success');
                     } else {
-                        const inviteDoc = await db.collection('invites').doc(email).get();
-                        if (!inviteDoc.exists) {
-                            throw new Error("This email has not been invited. Please contact support.");
-                        }
+                        const invite = await db.collection('invites').doc(email).get();
+                        if (!invite.exists) throw new Error("Verification required. Contact support.");
                         await auth.createUserWithEmailAndPassword(email, password);
-                        setMessage('Account created successfully! Please log in.');
-                        setIsLogin(true);
-                        setLoginStatus('idle');
                     }
-                } catch (err) {
-                    setError(err.message);
-                    setLoginStatus('error');
-                } finally {
-                    setLoading(false);
-                }
+                } catch (err) { setError(err.message); } finally { setLoading(false); }
             };
-            
-            if (loginStatus === 'success') {
-                return (
-                    <div className="flex items-center justify-center min-h-screen">
-                        <div className="text-center">
-                            <div className="loader mx-auto"></div>
-                            <p className="mt-4 text-gray-600 dark:text-gray-300">Login successful! Redirecting...</p>
-                        </div>
-                    </div>
-                );
-            }
 
             return (
-                <div className="flex items-center justify-center min-h-screen p-4">
-                    <div className="w-full max-w-md p-8 space-y-6 bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl">
-                        <div className="text-center">
-                            <img src="https://i.imgur.com/GQya5pg.png" alt="Logo" className="w-20 mx-auto mb-4"/>
-                            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">{showReset ? 'Reset Password' : (isLogin ? 'Welcome Back' : 'Create Your Account')}</h2>
-                            <p className="text-gray-600 dark:text-gray-400 mt-2">{showReset ? 'Enter your email to receive a reset link.' : (isLogin ? 'Sign in to access the wholesale portal' : 'Sign up with your invited email address')}</p>
+                <div className="flex items-center justify-center min-h-screen bg-brand-50 dark:bg-brand-900 p-6">
+                    <div className="w-full max-w-md p-10 space-y-8 glass rounded-[2.5rem] shadow-2xl">
+                        <div className="text-center space-y-4">
+                            <img src="https://i.imgur.com/GQya5pg.png" alt="Logo" className="w-24 mx-auto"/>
+                            <div className="space-y-1">
+                                <h2 className="text-2xl font-black text-brand-900 dark:text-white uppercase tracking-tight">{isLogin ? 'Partner Sign In' : 'Join the Network'}</h2>
+                                <p className="text-brand-gold text-[10px] uppercase tracking-[0.3em] font-bold">Lord & Taylor Partnership</p>
+                            </div>
                         </div>
-                        
-                        {showReset ? (
-                             <form onSubmit={handlePasswordReset} className="space-y-6">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
-                                    <input type="email" value={email} onChange={e => setEmail(e.target.value)} required className="mt-1 block w-full p-3 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
-                                </div>
-                                {error && <p className="text-red-500 dark:text-red-400 text-sm">{error}</p>}
-                                {message && <p className="text-green-600 dark:text-green-400 text-sm">{message}</p>}
-                                <button type="submit" disabled={loading} className="w-full py-3 px-4 rounded-lg border border-transparent bg-indigo-600 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 transition-colors">
-                                    {loading ? <div className="loader mx-auto" style={{width: '20px', height: '20px'}}></div> : 'Send Reset Link'}
-                                </button>
-                                <p className="text-sm text-center">
-                                    <button type="button" onClick={() => setShowReset(false)} className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300">
-                                        Back to Login
-                                    </button>
-                                </p>
-                               </form>
-                        ) : (
-                            <>
-                                <form onSubmit={handleSubmit} className="space-y-6">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
-                                        <input type="email" value={email} onChange={e => setEmail(e.target.value)} required className="mt-1 block w-full p-3 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
-                                    </div>
-                                    <div>
-                                        <div className="flex justify-between items-center">
-                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
-                                            {isLogin && (
-                                                <button type="button" onClick={() => setShowReset(true)} className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300">
-                                                    Forgot password?
-                                                </button>
-                                            )}
-                                        </div>
-                                        <input type="password" value={password} onChange={e => setPassword(e.target.value)} required className="mt-1 block w-full p-3 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
-                                    </div>
-                                    {error && <p className="text-red-500 dark:text-red-400 text-sm">{error}</p>}
-                                    {message && <p className="text-green-600 dark:text-green-400 text-sm">{message}</p>}
-                                    <button type="submit" disabled={loading} className="w-full py-3 px-4 rounded-lg border border-transparent bg-indigo-600 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 transition-colors">
-                                        {loading ? <div className="loader mx-auto" style={{width: '20px', height: '20px'}}></div> : (isLogin ? 'Sign In' : 'Sign Up')}
-                                    </button>
-                                </form>
-                                <p className="text-sm text-center text-gray-600 dark:text-gray-400">
-                                    {isLogin ? "Don't have an account?" : "Already have an account?"}
-                                    <button onClick={() => { setIsLogin(!isLogin); setError(''); setMessage(''); }} className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 ml-1">
-                                        {isLogin ? 'Sign up' : 'Sign in'}
-                                    </button>
-                                </p>
-                            </>
-                        )}
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <input type="email" placeholder="Business Email" value={email} onChange={e => setEmail(e.target.value)} required className="w-full p-4 rounded-2xl bg-brand-50 dark:bg-brand-800 border border-brand-200 dark:border-brand-700 dark:text-white outline-none focus:ring-2 focus:ring-brand-gold/30 transition-all text-sm" />
+                            <input type="password" placeholder="Access Key" value={password} onChange={e => setPassword(e.target.value)} required className="w-full p-4 rounded-2xl bg-brand-50 dark:bg-brand-800 border border-brand-200 dark:border-brand-700 dark:text-white outline-none focus:ring-2 focus:ring-brand-gold/30 transition-all text-sm" />
+                            {error && <p className="text-rose-500 text-[10px] text-center font-bold uppercase p-2">{error}</p>}
+                            <button type="submit" disabled={loading} className="w-full py-4 rounded-2xl bg-brand-900 dark:bg-brand-gold text-white dark:text-brand-900 font-black uppercase tracking-widest text-xs hover:shadow-xl transition-all disabled:opacity-50">
+                                {loading ? 'Authorizing...' : (isLogin ? 'Enter Portal' : 'Register')}
+                            </button>
+                        </form>
+                        <p className="text-center text-[11px] text-brand-500 uppercase tracking-widest">
+                            {isLogin ? "Need access?" : "Existing Partner?"}
+                            <button onClick={() => setIsLogin(!isLogin)} className="ml-2 font-black text-brand-900 dark:text-brand-gold underline underline-offset-4">{isLogin ? 'Sign Up' : 'Login'}</button>
+                        </p>
                     </div>
                 </div>
             );
         }
-        
+
         const tagColorMap = {
-            'Special Pricing': 'bg-red-500 text-white',
-            'New Arrival': 'bg-blue-500 text-white',
-            'Best Seller': 'bg-yellow-400 text-yellow-900',
-            'Holiday Promo': 'bg-green-500 text-white'
+            'Special Pricing': 'bg-rose-500 text-white',
+            'New Arrival': 'bg-sky-500 text-white',
+            'Best Seller': 'bg-brand-gold text-brand-900',
+            'Holiday Promo': 'bg-emerald-500 text-white'
         };
 
-        // --- Product Database Component ---
         function ProductDatabase() {
-            const [items, setItems] = useState([]);
+            const [rawItems, setRawItems] = useState([]);
             const [loading, setLoading] = useState(true);
             const [error, setError] = useState('');
-            const [lastVisibleDoc, setLastVisibleDoc] = useState(null);
-            const [firstVisibleDoc, setFirstVisibleDoc] = useState(null);
-            const [currentPage, setCurrentPage] = useState(1);
             const [selectedItem, setSelectedItem] = useState(null);
-            const [exportLoading, setExportLoading] = useState(false);
-            const [searchMode, setSearchMode] = useState('browse');
-            const [lastFetchCount, setLastFetchCount] = useState(0);
             
             const [categoryMetadata, setCategoryMetadata] = useState(null);
             const [brandsLoading, setBrandsLoading] = useState(true);
-            const [activeCategoryTab, setActiveCategoryTab] = useState('Fragrance');
-            const [viewMode, setViewMode] = useState('inStock'); // 'inStock' or 'outOfStock'
+            const [activeCategoryTab, setActiveCategoryTab] = useState('Shop All'); 
+            const [viewMode, setViewMode] = useState('inStock');
+            const [currentPage, setCurrentPage] = useState(1);
+            const ITEMS_PER_PAGE = 100;
 
             const [activeFilters, setActiveFilters] = useState({
                 brand: 'All Brands',
                 search: { term: '', type: 'upc' },
-                tags: {
-                    'Special Pricing': false,
-                    'New Arrival': false,
-                    'Best Seller': false,
-                    'Holiday Promo': false,
-                }
+                tags: { 'Special Pricing': false, 'New Arrival': false, 'Best Seller': false, 'Holiday Promo': false }
             });
             const [sortBy, setSortBy] = useState('brand');
             const [sortDirection, setSortDirection] = useState('asc');
 
-            const ITEMS_PER_PAGE = 100;
             const appId = "1:975989212115:web:5b088a0e647c12d9b2e526";
 
-            // --- Visibility Logic ---
-            const baseVisibleCheck = (item) => {
-                const hasImage = item.imageUrl && item.imageUrl.trim() !== '';
-                const isNotTester = item.subCategory !== 'Tester';
-                const hasPrice = item.askingPrice && Number(item.askingPrice) >= 15;
-                return hasImage && isNotTester && hasPrice;
-            };
+            const baseVisibleCheck = (item) => (item.imageUrl && item.imageUrl.trim() !== '' && item.subCategory !== 'Tester' && item.askingPrice && Number(item.askingPrice) >= 15);
+            const isItemVisible = (item) => (baseVisibleCheck(item) && item.availableInventory > 0);
+            const isOOSVisible = (item) => (baseVisibleCheck(item) && (!item.availableInventory || item.availableInventory === 0));
 
-            const isItemVisible = (item) => {
-                const hasInventory = item.availableInventory && Number(item.availableInventory) > 0;
-                return baseVisibleCheck(item) && hasInventory;
-            };
-
-            const isOOSVisible = (item) => {
-                const isOutOfStock = !item.availableInventory || Number(item.availableInventory) === 0;
-                return baseVisibleCheck(item) && isOutOfStock;
-            }
-
-            // --- Data Fetching Hooks ---
             useEffect(() => {
                 const fetchMetadata = async () => {
-                    if (!appId) return;
                     setBrandsLoading(true);
                     try {
-                        const metaDocRef = db.collection('artifacts').doc(appId).collection('public').doc('categoryInfo');
-                        const metaDoc = await metaDocRef.get();
-                        
-                        if (metaDoc.exists) {
-                            setCategoryMetadata(metaDoc.data().categories);
-                        } else {
-                            setError("Brand metadata not found. Please ensure the backend script has run successfully.");
-                            console.warn(`Document not found at /artifacts/${appId}/public/categoryInfo`);
-                        }
-                    } catch (err) {
-                        console.error("Failed to fetch metadata:", err);
-                        setError("Could not load brand filter metadata. Check permissions and document path.");
-                    } finally {
-                        setBrandsLoading(false);
-                    }
+                        const metaDoc = await db.collection('artifacts').doc(appId).collection('public').doc('categoryInfo').get();
+                        if (metaDoc.exists) setCategoryMetadata(metaDoc.data().categories);
+                    } catch (err) { console.error(err); } finally { setBrandsLoading(false); }
                 };
                 fetchMetadata();
             }, [appId]);
 
-
-            const fetchData = useCallback(async (direction = 'next', pageNum = 1) => {
-                if (searchMode === 'bulk') return; 
-                setLoading(true);
-                setError('');
-                
-                const isNewQuery = pageNum === 1;
-                
-                let query = productsCollection;
-
-                query = query.where('category', '==', activeCategoryTab);
-                
-                if(viewMode === 'outOfStock') {
-                    query = query.where('availableInventory', '==', 0);
-                }
-
-                const selectedTags = Object.entries(activeFilters.tags)
-                    .filter(([, value]) => value)
-                    .map(([key]) => key);
-
-                // UPDATED: Use 'array-contains-any' for multi-tag filtering
-                if (selectedTags.length > 0) {
-                    query = query.where('specialTag', 'array-contains-any', selectedTags);
-                }
-
-                if (activeFilters.brand && activeFilters.brand !== 'All Brands') {
-                    query = query.where('brand', '==', activeFilters.brand);
-                }
-                
-                const isNameSearch = activeFilters.search.term && activeFilters.search.type === 'itemName_lowercase';
-                if (isNameSearch) {
-                    query = query.where('itemName_lowercase', '>=', activeFilters.search.term.toLowerCase());
-                    query = query.where('itemName_lowercase', '<=', activeFilters.search.term.toLowerCase() + '\uf8ff');
-                } else if (activeFilters.search.term) {
-                    if (activeFilters.search.type === 'upc') {
-                        const term = activeFilters.search.term;
-                        const possibleUpcs = new Set([term, term.replace(/^0+/, '')]);
-                        if (!term.startsWith('0')) {
-                            possibleUpcs.add('0' + term);
-                        }
-                        query = query.where('upc', 'in', [...possibleUpcs]);
-                    } else {
-                        query = query.where(activeFilters.search.type, '==', activeFilters.search.term);
-                    }
-                }
-
-                const primaryOrderByField = isNameSearch ? 'itemName_lowercase' : sortBy;
-                
-                // Firestore limitation: inequality filters must be on the first orderBy field.
-                if (selectedTags.length === 0) {
-                    query = query.orderBy(primaryOrderByField, sortDirection);
-                    if (primaryOrderByField !== 'sku') {
-                      query = query.orderBy('sku', 'asc');
-                    }
-                }
-
-
-                query = query.limit(ITEMS_PER_PAGE);
-                if (direction === 'next' && !isNewQuery && lastVisibleDoc) {
-                    query = query.startAfter(lastVisibleDoc);
-                } else if (direction === 'prev' && !isNewQuery && firstVisibleDoc) {
-                    query = query.endBefore(firstVisibleDoc).limitToLast(ITEMS_PER_PAGE);
-                }
-
-                try {
-                    const snapshot = await query.get();
-                    setLastFetchCount(snapshot.docs.length);
-
-                    const fetchedItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    
-                    const newItems = viewMode === 'inStock' 
-                        ? fetchedItems.filter(isItemVisible) 
-                        : fetchedItems.filter(isOOSVisible);
-
-                    if (snapshot.empty && isNewQuery) {
-                        setItems([]);
-                    } else if (fetchedItems.length > 0) {
-                        setLastVisibleDoc(snapshot.docs[snapshot.docs.length - 1]);
-                        setFirstVisibleDoc(snapshot.docs[0]);
-                        setItems(newItems);
-                    } else if (!isNewQuery) {
-                       setItems([]);
-                    } else {
-                        setItems([]);
-                    }
-                    
-                    setCurrentPage(pageNum);
-                } catch (err) {
-                    console.error("Firestore query failed:", err);
-                    setError("Could not fetch data. This can happen if a combination of filters is not supported by a database index. Try clearing filters. Error: " + err.message);
-                    setItems([]);
-                } finally {
-                    setLoading(false);
-                }
-            }, [activeFilters, sortBy, sortDirection, lastVisibleDoc, firstVisibleDoc, searchMode, activeCategoryTab, viewMode]);
-
-
             useEffect(() => {
-                fetchData('next', 1);
-            }, [activeFilters, sortBy, sortDirection, activeCategoryTab, viewMode]);
-            
-            const handleFilterChange = (newFilters) => {
-                setSearchMode('browse');
-                setLastVisibleDoc(null);
-                setFirstVisibleDoc(null);
-                setActiveFilters(prev => ({...prev, ...newFilters}));
-                setCurrentPage(1);
-            };
-            
-            const handleSearch = (searchTerm, searchType) => {
-                setSearchMode('search');
-                setLastVisibleDoc(null);
-                setFirstVisibleDoc(null);
-                setActiveFilters(prev => ({ ...prev, search: { term: searchTerm, type: searchType } }));
-                setCurrentPage(1);
-            };
-
-            const handleBulkSearch = async (upcs) => {
-                const upcsToProcess = [...new Set(upcs.map(upc => upc.trim()).filter(upc => upc))];
-                if (upcsToProcess.length === 0) return;
-
-                const expandedUpcs = new Set();
-                upcsToProcess.forEach(upc => {
-                    expandedUpcs.add(upc);
-                    expandedUpcs.add(upc.replace(/^0+/, ''));
-                    if (!upc.startsWith('0')) {
-                        expandedUpcs.add('0' + upc);
+                const fetchSourceData = async () => {
+                    setLoading(true);
+                    setError('');
+                    try {
+                        let query = productsCollection;
+                        if (activeCategoryTab !== 'Shop All') {
+                            query = query.where('category', '==', activeCategoryTab);
+                        }
+                        const snapshot = await query.get();
+                        const fetched = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        setRawItems(fetched);
+                        setCurrentPage(1);
+                    } catch (err) {
+                        setError("Failed to sync catalog manifest.");
+                        console.error(err);
+                    } finally {
+                        setLoading(false);
                     }
-                });
-                const upcList = [...expandedUpcs];
-
-                if (upcList.length > 300) {
-                    setError("Bulk search is limited to 300 unique UPCs at a time. Your list expanded to " + upcList.length + " variations to check for leading zeros.");
-                    return;
-                }
-
-                setLoading(true);
-                setSearchMode('bulk');
-                setError('');
-                setCurrentPage(1);
-                
-                try {
-                    const chunks = [];
-                    for (let i = 0; i < upcList.length; i += 10) {
-                        chunks.push(upcList.slice(i, i + 10));
-                    }
-
-                    const queryPromises = chunks.map(chunk => 
-                        productsCollection.where('upc', 'in', chunk).get()
-                    );
-                    
-                    const querySnapshots = await Promise.all(queryPromises);
-                    
-                    const allDocs = [];
-                    querySnapshots.forEach(snapshot => {
-                        snapshot.forEach(doc => allDocs.push({ id: doc.id, ...doc.data() }));
-                    });
-                    
-                    // In bulk search, show both in-stock and OOS that match
-                    const filteredDocs = allDocs.filter(p => isItemVisible(p) || isOOSVisible(p));
-                    const sortedDocs = filteredDocs.sort((a, b) => a.sku.localeCompare(b.sku));
-                    setItems(sortedDocs);
-
-                } catch (err) {
-                    console.error("Firestore bulk query failed:", err);
-                    setError("Could not fetch data for bulk search. " + err.message);
-                    setItems([]);
-                } finally {
-                    setLoading(false);
-                }
-            };
-            
-            const handleSortChange = (e) => {
-                setSortBy(e.target.value);
-                setLastVisibleDoc(null);
-                setFirstVisibleDoc(null);
-                setCurrentPage(1);
-            };
-
-            const handleSortDirection = () => {
-                setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
-                setLastVisibleDoc(null);
-                setFirstVisibleDoc(null);
-                setCurrentPage(1);
-            };
-
-            const handleBrowseAll = () => {
-                setSearchMode('browse');
-                setLastVisibleDoc(null);
-                setFirstVisibleDoc(null);
-                setActiveCategoryTab('Fragrance');
-                setViewMode('inStock');
-                setActiveFilters({
-                    brand: 'All Brands',
-                    search: { term: '', type: 'upc' },
-                    tags: {
-                        'Special Pricing': false,
-                        'New Arrival': false,
-                        'Best Seller': false,
-                        'Holiday Promo': false,
-                    }
-                });
-                setSortBy('brand');
-                setSortDirection('asc');
-                setCurrentPage(1);
-            };
-
-            // UPDATED CSV EXPORT FUNCTION
-            const triggerCsvDownload = (dataToExport) => {
-                // New header order as requested
-                const headers = [
-                    "Image", "SKU", "UPC", "Asin", "Brand", 
-                    "Item Name", "Size", "Type", "Available Inventory", 
-                    "MSRP", "Asking Price"
-                ];
-
-                // New row mapping as requested
-                const rows = dataToExport.map(item => [
-                    item.imageUrl || '', // Image column restored
-                    item.sku || '',
-                    `="${item.upc || ''}"`, // Keep ="..." to prevent Excel from converting UPCs to scientific notation
-                    item.asin || '',
-                    item.brand || '',
-                    item.itemName || '',
-                    item.size || '',
-                    item.type || '',
-                    item.availableInventory || 0,
-                    item.msrp || '',
-                    item.askingPrice || 0
-                ]);
-
-                const escapeCell = (cell) => {
-                    const strCell = String(cell === null || cell === undefined ? "" : cell);
-                    if (strCell.includes(',') || strCell.includes('"') || strCell.includes('\n')) {
-                        return `"${strCell.replace(/"/g, '""')}"`;
-                    }
-                    return strCell;
                 };
+                fetchSourceData();
+            }, [activeCategoryTab]);
 
-                let csvContent = [
-                    headers.join(','),
-                    ...rows.map(row => row.map(escapeCell).join(','))
-                ].join('\r\n');
+            const processedItems = useMemo(() => {
+                let filtered = [...rawItems];
+                filtered = filtered.filter(item => viewMode === 'inStock' ? isItemVisible(item) : isOOSVisible(item));
+                
+                if (activeFilters.brand !== 'All Brands') {
+                    filtered = filtered.filter(item => item.brand === activeFilters.brand);
+                }
 
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement("a");
+                const selectedTags = Object.entries(activeFilters.tags).filter(([, v]) => v).map(([k]) => k);
+                if (selectedTags.length > 0) {
+                    filtered = filtered.filter(item => Array.isArray(item.specialTag) && item.specialTag.some(t => selectedTags.includes(t)));
+                }
+
+                const term = activeFilters.search.term.trim().toLowerCase();
+                if (term) {
+                    const type = activeFilters.search.type;
+                    if (type === 'upc') {
+                        // Support for comma-separated lists in bulk or single search
+                        const searchTerms = term.split(',').map(x => x.trim()).filter(x => x);
+                        filtered = filtered.filter(item => {
+                            const itemUpc = String(item.upc || '').toLowerCase();
+                            return searchTerms.some(st => {
+                                const variations = [st, st.replace(/^0+/, ''), '0' + st, '00' + st];
+                                return variations.includes(itemUpc);
+                            });
+                        });
+                    } else if (type === 'itemName_lowercase') {
+                        filtered = filtered.filter(item => (item.itemName || '').toLowerCase().includes(term));
+                    } else {
+                        filtered = filtered.filter(item => String(item[type] || '').toLowerCase() === term);
+                    }
+                }
+
+                filtered.sort((a, b) => {
+                    let valA = a[sortBy] || '';
+                    let valB = b[sortBy] || '';
+                    if (typeof valA === 'string') valA = valA.toLowerCase();
+                    if (typeof valB === 'string') valB = valB.toLowerCase();
+                    if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
+                    if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
+                    return (a.sku || '').localeCompare(b.sku || '');
+                });
+                return filtered;
+            }, [rawItems, viewMode, activeFilters, sortBy, sortDirection]);
+
+            const paginatedItems = useMemo(() => {
+                const start = (currentPage - 1) * ITEMS_PER_PAGE;
+                return processedItems.slice(start, start + ITEMS_PER_PAGE);
+            }, [processedItems, currentPage]);
+
+            const triggerCsvDownload = (data) => {
+                const headers = ["Image", "SKU", "UPC", "Asin", "Brand", "Item Name", "Size", "Type", "Stock", "MSRP", "Price"];
+                const rows = data.map(i => [i.imageUrl||'', i.sku||'', `="${i.upc||''}"`, i.asin||'', i.brand||'', i.itemName||'', i.size||'', i.type||'', i.availableInventory||0, i.msrp||'', i.askingPrice||0]);
+                const csv = [headers.join(','), ...rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(','))].join('\r\n');
+                const blob = new Blob([csv], { type: 'text/csv' });
                 const url = URL.createObjectURL(blob);
-                link.setAttribute("href", url);
-                link.setAttribute("download", "wholesale_product_report.csv");
-                link.style.visibility = 'hidden';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                const a = document.createElement("a");
+                a.href = url; a.download = `wholesale_report.csv`; a.click();
             };
 
-            const handleExport = () => {
-                if (items.length === 0) {
-                    console.warn("No data to export.");
-                    return;
-                }
-                triggerCsvDownload(items);
-            };
-            
-            const handleFullExport = async () => {
-                setExportLoading(true);
-                try {
-                    const allDocs = [];
-                    // This exports only visible IN-STOCK items from the entire catalog
-                    const snapshot = await productsCollection.get();
-                    snapshot.forEach(doc => allDocs.push(doc.data()));
-
-                    const filteredForExport = allDocs.filter(isItemVisible);
-
-                    triggerCsvDownload(filteredForExport);
-                } catch (err) {
-                    console.error("Full export failed:", err);
-                    setError("Could not export the full catalog.");
-                } finally {
-                    setExportLoading(false);
-                }
-            };
-            
-            const changePage = (direction) => {
-                const newPage = direction === 'next' ? currentPage + 1 : currentPage - 1;
-                fetchData(direction, newPage);
-            };
-
-            const categories = ['Fragrance', 'Beauty', 'Gift Sets'];
-            
             const displayedBrands = useMemo(() => {
-                if (!categoryMetadata || !activeCategoryTab) return [];
+                if (!categoryMetadata) return [];
                 const key = viewMode === 'inStock' ? 'inStockBrands' : 'outOfStockBrands';
+                if (activeCategoryTab === 'Shop All') {
+                    const allBrands = new Set();
+                    Object.keys(categoryMetadata).forEach(cat => {
+                        (categoryMetadata[cat]?.[key] || []).forEach(b => allBrands.add(b));
+                    });
+                    return [...allBrands];
+                }
                 return categoryMetadata[activeCategoryTab]?.[key] || [];
             }, [categoryMetadata, activeCategoryTab, viewMode]);
 
             return (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <aside className="lg:col-span-2">
-                        <FilterSidePanel 
-                           brands={displayedBrands}
-                           isLoading={brandsLoading}
-                           activeFilters={activeFilters}
-                           onFilterChange={handleFilterChange}
-                        />
+                <div className="flex flex-col lg:flex-row gap-6">
+                    <aside className="lg:w-72 shrink-0">
+                        <FilterSidePanel brands={displayedBrands} isLoading={brandsLoading} activeFilters={activeFilters} onFilterChange={f => { setActiveFilters(p => ({...p, ...f})); setCurrentPage(1); }} />
                     </aside>
-                    <div className="lg:col-span-10">
+                    <div className="flex-grow min-w-0">
                         <SearchControls 
-                            onSearch={handleSearch}
-                            onBulkSearch={handleBulkSearch}
-                            onBrowseAll={handleBrowseAll}
-                            sortBy={sortBy}
-                            setSortBy={handleSortChange}
-                            sortDirection={sortDirection}
-                            onSortDirectionChange={handleSortDirection}
+                            onSearch={(t, y) => setActiveFilters(p => ({...p, search: {term: t, type: y}}))} 
+                            onBulkSearch={u => setActiveFilters(p => ({...p, search: {term: u.join(','), type: 'upc'}}))}
+                            onBrowseAll={() => setActiveFilters({ brand: 'All Brands', search: { term: '', type: 'upc' }, tags: { 'Special Pricing': false, 'New Arrival': false, 'Best Seller': false, 'Holiday Promo': false } })} 
+                            sortBy={sortBy} 
+                            setSortBy={e => setSortBy(e.target.value)} 
+                            sortDirection={sortDirection} 
+                            onSortDirectionChange={() => setSortDirection(p => p==='asc'?'desc':'asc')} 
                         />
-                        {error && <p className="text-red-500 dark:text-red-400 my-4 p-4 bg-red-100 dark:bg-red-900/50 rounded-lg">{error}</p>}
-                        
-                        {/* --- NEW TABS CONTROL BAR --- */}
-                        <div className="bg-white/70 dark:bg-gray-800/60 backdrop-blur-lg p-2 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 mb-6 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
-                            {/* Category Tabs */}
-                            <div className="p-1 bg-gray-200 dark:bg-gray-900/50 rounded-lg flex items-center space-x-1">
-                                {categories.map((cat) => (
-                                     <button
-                                        key={cat}
-                                        onClick={() => {
-                                            setActiveCategoryTab(cat);
-                                            setViewMode('inStock'); // Reset to inStock when changing category
-                                        }}
-                                        className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all duration-300 ${
-                                            activeCategoryTab === cat
-                                                ? 'bg-white dark:bg-gray-700 text-indigo-600 dark:text-indigo-300 shadow-sm'
-                                                : 'text-gray-600 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-700/50'
-                                        }`}
-                                    >
-                                        {cat}
-                                    </button>
+                        <div className="mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <div className="flex p-1 bg-brand-100 dark:bg-brand-800 rounded-xl w-full md:w-auto overflow-x-auto filter-scrollbar">
+                                {['Shop All', 'Fragrance', 'Beauty', 'Gift Sets'].map(cat => (
+                                    <button key={cat} onClick={() => setActiveCategoryTab(cat)} className={`flex-grow md:flex-none px-5 py-2 text-xs font-bold rounded-lg transition-all whitespace-nowrap ${activeCategoryTab === cat ? 'bg-white dark:bg-brand-700 text-brand-900 shadow-sm' : 'text-brand-500 hover:text-brand-700'}`}>{cat}</button>
                                 ))}
                             </div>
-                            {/* Stock Status Tabs */}
-                            <div className="p-1 bg-gray-200 dark:bg-gray-900/50 rounded-lg flex items-center space-x-1">
-                                <button onClick={() => setViewMode('inStock')} className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all duration-300 ${viewMode === 'inStock' ? 'bg-white dark:bg-gray-700 text-green-600 dark:text-green-400 shadow-sm' : 'text-gray-600 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-700/50'}`}>
-                                    In Stock
-                                </button>
-                                <button onClick={() => setViewMode('outOfStock')} className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all duration-300 ${viewMode === 'outOfStock' ? 'bg-white dark:bg-gray-700 text-red-500 dark:text-red-400 shadow-sm' : 'text-gray-600 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-700/50'}`}>
-                                    Out-of-Stock
-                                </button>
+                            <div className="flex items-center gap-3 w-full md:w-auto">
+                                <button onClick={() => setViewMode('inStock')} className={`flex-grow md:flex-none px-4 py-2 text-xs font-bold rounded-xl transition-all ${viewMode === 'inStock' ? 'bg-brand-900 text-white shadow-lg' : 'bg-brand-100 text-brand-500'}`}>Active Stock</button>
+                                <button onClick={() => setViewMode('outOfStock')} className={`flex-grow md:flex-none px-4 py-2 text-xs font-bold rounded-xl transition-all ${viewMode === 'outOfStock' ? 'bg-brand-900 text-white shadow-lg' : 'bg-brand-100 text-brand-500'}`}>Out of Stock</button>
+                                <button onClick={() => triggerCsvDownload(processedItems)} className="p-2.5 bg-emerald-500 text-white rounded-xl shadow-lg hover:opacity-90 transition-all"><svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg></button>
                             </div>
                         </div>
-
-                        <div className="flex justify-end mb-4 space-x-2">
-                            {items.length > 0 && !loading && (
-                                <button onClick={handleExport} className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 transition-colors">
-                                    Export Results
-                                </button>
-                            )}
-                            <button onClick={handleFullExport} disabled={exportLoading} className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition-colors disabled:opacity-50">
-                                {exportLoading ? 'Exporting...' : 'Export Full Catalog'}
-                            </button>
-                        </div>
-
                         {loading ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-                                {Array.from({ length: 10 }).map((_, i) => (
-                                    <div key={i} className="skeleton-card">
-                                        <div className="skeleton-image"></div>
-                                        <div className="p-4"><div className="skeleton-text w-3/4"></div><div className="skeleton-text w-1/2"></div></div>
-                                        <div className="shimmer"></div>
-                                    </div>
-                                ))}
+                            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 lg:gap-6">
+                                {[...Array(8)].map((_, i) => <div key={i} className="h-64 glass rounded-[2rem] shimmer-bg"></div>)}
                             </div>
-                        ) : items.length > 0 ? (
+                        ) : paginatedItems.length > 0 ? (
                             <>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-                                    {items.map((item, index) => <ItemCard key={item.id} item={item} onCardClick={() => setSelectedItem(item)} style={{ animationDelay: `${index * 50}ms` }} />)}
+                                <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 lg:gap-6">
+                                    {paginatedItems.map((item, idx) => <ItemCard key={item.id} item={item} onCardClick={() => setSelectedItem(item)} style={{ animationDelay: `${idx * 40}ms` }} />)}
                                 </div>
-                                {searchMode !== 'bulk' && <PaginationControls currentPage={currentPage} onPageChange={changePage} lastFetchCount={lastFetchCount} itemsPerPage={ITEMS_PER_PAGE} />}
+                                <PaginationControls currentPage={currentPage} onPageChange={(_, p) => setCurrentPage(p)} lastFetchCount={paginatedItems.length} itemsPerPage={ITEMS_PER_PAGE} />
                             </>
                         ) : (
-                             <div className="text-center py-16 text-gray-500 dark:text-gray-500 mt-8 bg-white dark:bg-gray-800/50 rounded-xl">
-                                  <h3 className="text-xl font-semibold mt-4 text-gray-700 dark:text-gray-300">No Results Found</h3>
-                                  <p className="text-gray-500 dark:text-gray-400">Try adjusting your filters or search terms.</p>
+                             <div className="text-center py-20 glass rounded-[2.5rem] border-2 border-dashed border-brand-200 dark:border-brand-800">
+                                  <p className="text-brand-500 font-bold uppercase tracking-widest text-xs">No Inventory Found</p>
                              </div>
                         )}
                         {selectedItem && <ItemModal item={selectedItem} onClose={() => setSelectedItem(null)} />}
@@ -898,95 +475,26 @@
 
         function FilterSidePanel({ brands, isLoading, activeFilters, onFilterChange }) {
             const [brandSearch, setBrandSearch] = useState('');
-            
-            const topBrands = useMemo(() => new Set([
-                'azzaro', 'afnan', 'armaf', 'al haramain', 'alfred sung', 'ariana grande',
-                'burberry', 'byredo', 'bvlgari', 'bond no 9', 'calvin klein', 'carolina herrera',
-                'chloe', 'coach', 'creed', 'christian dior', 'davidoff', 'dolce & gabbana',
-                'ferragamo', 'gucci', 'guess', 'hermes', 'hugo boss', 'jimmy choo', 'juicy couture',
-                'kate spade', 'karl lagerfeld', 'lancome', 'lacoste', 'marc jacobs', 'michael kors',
-                'mugler', 'paco rabanne', 'ralph lauren', 'valentino', 'versace', 'viktor & rolf',
-                'yves saint laurent'
-            ]), []);
-
-            const tagFilters = [
-                { label: 'Special Pricing', value: 'Special Pricing' },
-                { label: 'New Arrival', value: 'New Arrival' },
-                { label: 'Best Seller', value: 'Best Seller' },
-                { label: 'Holiday Sale', value: 'Holiday Promo' }
-            ];
-
-            const handleBrandChange = (brand) => {
-                onFilterChange({ ...activeFilters, brand: brand });
-            };
-
-            const handleTagChange = (tagValue) => {
-                const newTags = { ...activeFilters.tags, [tagValue]: !activeFilters.tags[tagValue] };
-                onFilterChange({ ...activeFilters, tags: newTags });
-            };
-
-            const filteredAndSortedBrands = useMemo(() => {
-                const filtered = !brandSearch 
-                    ? brands 
-                    : brands.filter(brand => brand.toLowerCase().includes(brandSearch.toLowerCase()));
-
-                return filtered.sort((a, b) => {
-                    const aIsTop = topBrands.has(a.toLowerCase());
-                    const bIsTop = topBrands.has(b.toLowerCase());
-                    if (aIsTop && !bIsTop) return -1; // a (top brand) comes first
-                    if (!aIsTop && bIsTop) return 1;  // b (top brand) comes first
-                    return a.localeCompare(b); // otherwise, sort alphabetically
-                });
-            }, [brandSearch, brands, topBrands]);
-
+            const tagFilters = [{ l: 'Special Price', v: 'Special Pricing' }, { l: 'New Arrival', v: 'New Arrival' }, { l: 'Best Seller', v: 'Best Seller' }, { l: 'Promo', v: 'Holiday Promo' }];
+            const sortedBrands = useMemo(() => (brandSearch ? brands.filter(b => b.toLowerCase().includes(brandSearch.toLowerCase())) : brands).sort((a,b) => a.localeCompare(b)), [brandSearch, brands]);
             return (
-                <div className="bg-white/70 dark:bg-gray-800/60 backdrop-blur-lg p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 sticky top-24 h-[calc(100vh-8rem)] flex flex-col">
-                   <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Filters</h3>
-
-                   {/* Tags Filter */}
-                   <div className="pb-4 border-b border-gray-200 dark:border-gray-700">
-                       <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Tags</h4>
-                       <div className="space-y-2">
+                <div className="glass p-6 rounded-[2.5rem] shadow-xl space-y-6 sticky top-28 h-[calc(100vh-10rem)] flex flex-col border-white/40">
+                   <div>
+                       <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-gold mb-4">Collection Tags</p>
+                       <div className="flex flex-wrap gap-2">
                            {tagFilters.map(tag => (
-                               <label key={tag.value} className="flex items-center space-x-2 cursor-pointer">
-                                  <input 
-                                       type="checkbox" 
-                                       checked={activeFilters.tags[tag.value] || false}
-                                       onChange={() => handleTagChange(tag.value)}
-                                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                   />
-                                   <span className="text-sm">{tag.label}</span>
-                               </label>
+                               <button key={tag.v} onClick={() => onFilterChange({ tags: {...activeFilters.tags, [tag.v]: !activeFilters.tags[tag.v]} })} className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter transition-all border ${activeFilters.tags[tag.v] ? 'bg-brand-900 border-brand-900 text-white shadow-md' : 'border-brand-200 text-brand-500 hover:border-brand-gold'}`}>{tag.l}</button>
                            ))}
                        </div>
                    </div>
-
-                   {/* Brands Filter */}
-                   <div className="flex-grow flex flex-col min-h-0 pt-4">
-                       <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Brands</h4>
-                       <div className="mb-2">
-                           <input 
-                               type="text" 
-                               value={brandSearch} 
-                               onChange={e => setBrandSearch(e.target.value)} 
-                               placeholder="Search brands..." 
-                               className="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-                           />
-                       </div>
-                       <div className="flex-grow overflow-y-auto space-y-1 filter-scrollbar pr-2">
-                           {isLoading && <div className="text-sm text-gray-500">Loading brands...</div>}
-                           {!isLoading && (
-                               <>
-                                   <button onClick={() => handleBrandChange('All Brands')} className={`w-full text-left px-3 py-1.5 rounded-md text-sm transition-colors ${activeFilters.brand === 'All Brands' ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300' : 'hover:bg-gray-200/50 dark:hover:bg-gray-700/50'}`}>
-                                       All Brands
-                                   </button>
-                                   {filteredAndSortedBrands.map(brand => (
-                                       <button key={brand} onClick={() => handleBrandChange(brand)} className={`w-full text-left px-3 py-1.5 rounded-md text-sm transition-colors truncate ${activeFilters.brand === brand ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300' : 'hover:bg-gray-200/50 dark:hover:bg-gray-700/50'}`}>
-                                           {brand} {topBrands.has(brand.toLowerCase()) && '🔥'}
-                                       </button>
-                                   ))}
-                               </>
-                           )}
+                   <div className="flex-grow flex flex-col min-h-0 border-t border-brand-100 dark:border-brand-800 pt-6">
+                       <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-gold mb-4">Designer List</p>
+                       <input type="text" value={brandSearch} onChange={e => setBrandSearch(e.target.value)} placeholder="Filter brands..." className="w-full p-3 mb-3 rounded-xl bg-brand-50 dark:bg-brand-900/50 border border-brand-100 dark:border-brand-700 text-xs outline-none focus:ring-1 focus:ring-brand-gold/50 dark:text-white" />
+                       <div className="flex-grow overflow-y-auto space-y-0.5 pr-2 filter-scrollbar">
+                           <button onClick={() => onFilterChange({ brand: 'All Brands' })} className={`w-full text-left px-3 py-2 rounded-lg text-[11px] font-bold transition-all ${activeFilters.brand === 'All Brands' ? 'bg-brand-900 text-white' : 'text-brand-500 hover:bg-brand-100'}`}>All Brands</button>
+                           {sortedBrands.map(b => (
+                               <button key={b} onClick={() => onFilterChange({ brand: b })} className={`w-full text-left px-3 py-2 rounded-lg text-[11px] font-bold transition-all truncate ${activeFilters.brand === b ? 'bg-brand-900 text-white shadow-md' : 'text-brand-500 hover:bg-brand-100'}`}>{b}</button>
+                           ))}
                        </div>
                    </div>
                 </div>
@@ -994,105 +502,73 @@
         }
         
         function SearchControls({ onSearch, onBulkSearch, onBrowseAll, sortBy, setSortBy, sortDirection, onSortDirectionChange }) {
-            const [searchTerm, setSearchTerm] = useState('');
-            const [searchType, setSearchType] = useState('upc');
-            const [upcList, setUpcList] = useState('');
-
-            const handleSearchClick = () => {
-                if (!searchTerm.trim()) return;
-                onSearch(searchTerm.trim(), searchType);
+            const [term, setTerm] = useState('');
+            const [type, setType] = useState('upc');
+            const [bulk, setBulk] = useState('');
+            const [showBulk, setShowBulk] = useState(false);
+            const handleSearch = () => term.trim() && onSearch(term.trim(), type);
+            const handleBulk = () => {
+                const list = bulk.split(/[\n,]/).map(x => x.trim()).filter(x => x);
+                list.length && onBulkSearch(list);
             };
-
-            const handleBulkSearchClick = () => {
-                const upcs = upcList.split(/[\n,]/);
-                onBulkSearch(upcs);
-            };
-            
             return (
-                <div className="bg-white/70 dark:bg-gray-800/60 backdrop-blur-lg p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 mb-8">
-                    <div className="grid grid-cols-1 md:grid-cols-10 gap-4 items-end">
-                        <div className="md:col-span-3">
-                            <label htmlFor="search-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Search Term</label>
-                            <input type="text" id="search-input" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Enter UPC, Item Name, etc." className="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5" />
-                        </div>
-                        <div className="md:col-span-2">
-                            <label htmlFor="search-type" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Search By</label>
-                            <select id="search-type" value={searchType} onChange={e => setSearchType(e.target.value)} className="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5">
+                <div className="glass p-3 rounded-2xl shadow-lg border-white/30 mb-6 transition-all">
+                    <div className="flex flex-wrap gap-2 items-center">
+                        <div className="flex bg-brand-50 dark:bg-brand-900 p-1 rounded-xl flex-grow md:flex-grow-0 border border-brand-100 dark:border-brand-800">
+                             <select value={type} onChange={e => setType(e.target.value)} className="bg-transparent text-[10px] font-black uppercase tracking-widest text-brand-gold px-2 outline-none cursor-pointer">
                                 <option value="upc">UPC</option>
-                                <option value="itemName_lowercase">Item Name</option>
+                                <option value="itemName_lowercase">Name</option>
                                 <option value="sku">SKU</option>
                             </select>
+                            <input type="text" value={term} onChange={e => setTerm(e.target.value)} onKeyPress={e => e.key === 'Enter' && handleSearch()} placeholder="Search catalog..." className="bg-transparent px-3 py-2 text-sm outline-none flex-grow min-w-[120px] dark:text-white" />
                         </div>
-                         <div className="md:col-span-2">
-                            <label htmlFor="sort-by" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sort By</label>
-                             <div className="flex">
-                                 <select id="sort-by" value={sortBy} onChange={setSortBy} className="block w-full rounded-l-lg border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5">
-                                     <option value="brand">Brand</option>
-                                     <option value="itemName_lowercase">Item Name</option>
-                                     <option value="sku">SKU</option>
-                                     <option value="upc">UPC</option>
-                                     <option value="askingPrice">Price</option>
-                                     <option value="availableInventory">Inventory</option>
-                                 </select>
-                                 <button onClick={onSortDirectionChange} className="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-r-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                                     {sortDirection === 'asc' ? '▲' : '▼'}
-                                 </button>
-                             </div>
+                        <div className="flex bg-brand-50 dark:bg-brand-900 p-1 rounded-xl border border-brand-100 dark:border-brand-800">
+                             <select value={sortBy} onChange={setSortBy} className="bg-transparent text-[10px] font-bold text-brand-500 px-2 outline-none cursor-pointer">
+                                <option value="brand">Brand</option>
+                                <option value="askingPrice">Price</option>
+                                <option value="availableInventory">Stock</option>
+                            </select>
+                            <button onClick={onSortDirectionChange} className="p-2 text-brand-gold hover:opacity-70 transition-opacity">
+                                {sortDirection === 'asc' ? <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path d="M5 15l7-7 7 7" /></svg> : <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path d="M19 9l-7 7-7-7" /></svg>}
+                            </button>
                         </div>
-                        <div className="md:col-span-3 flex items-center space-x-3">
-                            <button onClick={handleSearchClick} className="w-full inline-flex justify-center rounded-lg border border-transparent bg-indigo-600 py-2.5 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 transition-all">Search</button>
-                            <button onClick={onBrowseAll} className="w-full inline-flex justify-center rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 py-2.5 px-4 text-sm font-medium text-gray-700 dark:text-gray-200 shadow-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition-all">Clear Filters</button>
+                        <div className="flex gap-2 ml-auto">
+                            <button onClick={handleSearch} className="px-5 py-2.5 bg-brand-900 text-white text-xs font-black uppercase tracking-widest rounded-xl hover:shadow-lg transition-all">Find</button>
+                            <button onClick={() => {setTerm(''); setBulk(''); onBrowseAll();}} className="p-2.5 border border-brand-200 rounded-xl text-brand-400 hover:text-brand-900 transition-all"><svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path d="M6 18L18 6M6 6l12 12" /></svg></button>
+                            <button onClick={() => setShowBulk(!showBulk)} className={`px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${showBulk ? 'bg-brand-gold text-brand-900' : 'bg-brand-50 text-brand-500'}`}>Bulk</button>
                         </div>
                     </div>
-                     <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                         <label htmlFor="upc-list-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bulk UPC Search</label>
-                         <textarea 
-                             id="upc-list-input" 
-                             rows="4" 
-                             value={upcList}
-                             onChange={e => setUpcList(e.target.value)}
-                             className="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" 
-                             placeholder="Paste a list of UPCs, one per line or separated by commas (up to 300)"
-                         ></textarea>
-                         <button 
-                             onClick={handleBulkSearchClick} 
-                             className="mt-2 w-full inline-flex justify-center rounded-lg border border-transparent bg-teal-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-colors"
-                         >
-                             Search UPC List
-                         </button>
-                     </div>
+                    {showBulk && (
+                        <div className="mt-3 pt-3 border-t border-brand-100 dark:border-brand-800 animate-in fade-in slide-in-from-top-2">
+                             <div className="flex gap-2">
+                                <textarea rows="1" value={bulk} onChange={e => setBulk(e.target.value)} className="flex-grow p-3 rounded-xl bg-brand-50 dark:bg-brand-800 text-[11px] outline-none resize-none dark:text-white" placeholder="Paste multiple UPCs separated by comma or newline..."></textarea>
+                                <button onClick={handleBulk} className="px-6 bg-brand-gold text-brand-900 text-[10px] font-black uppercase tracking-widest rounded-xl shadow-sm hover:opacity-90">Verify</button>
+                             </div>
+                        </div>
+                    )}
                 </div>
             );
         }
 
         function ItemCard({ item, onCardClick, style }) {
-            const price = parseFloat(item.askingPrice);
-            const priceText = !isNaN(price) && price >= 0 ? '$' + price.toFixed(2) : 'N/A';
-            const placeholderImg = 'https://i.imgur.com/IUBzxFv.jpeg';
-            
+            const priceText = item.askingPrice ? '$' + Number(item.askingPrice).toFixed(2) : 'TBD';
+            const placeholder = 'https://i.imgur.com/IUBzxFv.jpeg';
             return (
-                <div onClick={onCardClick} className="result-card bg-white dark:bg-gray-800/80 rounded-xl shadow-lg overflow-hidden flex flex-col border border-gray-200 dark:border-gray-700 cursor-pointer hover:border-indigo-500 dark:hover:border-indigo-400 hover:scale-[1.03] transition-all duration-300 relative" style={style}>
-                    {/* UPDATED: Multi-tag display logic */}
-                    <div className="absolute top-2 left-2 flex flex-col space-y-1 z-10">
-                      {Array.isArray(item.specialTag) && item.specialTag.map(tag => {
-                        const tagColor = tagColorMap[tag] || 'bg-gray-500 text-white';
-                        return (
-                          <div key={tag} className={`${tagColor} text-xs font-bold px-2 py-0.5 rounded-full`}>
-                            {tag}
-                          </div>
-                        );
-                      })}
+                <div onClick={onCardClick} className="result-card card-hover glass rounded-[2rem] p-4 flex flex-col cursor-pointer group shadow-sm border-white/50" style={style}>
+                    <div className="relative aspect-square rounded-2xl overflow-hidden bg-white flex items-center justify-center p-4">
+                        <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
+                          {Array.isArray(item.specialTag) && item.specialTag.slice(0, 1).map(t => (
+                            <span key={t} className={`${tagColorMap[t] || 'bg-brand-500'} text-[8px] font-black uppercase px-2 py-0.5 rounded-full shadow-sm`}>{t}</span>
+                          ))}
+                        </div>
+                        <img loading="lazy" src={item.imageUrl || placeholder} className="max-w-full max-h-full object-contain group-hover:scale-105 transition-all duration-500" onError={e => e.target.src=placeholder} />
                     </div>
-                    <div className="w-full h-48 bg-white flex items-center justify-center p-2">
-                        <img loading="lazy" src={item.imageUrl || placeholderImg} alt={item.itemName} className="w-full h-full object-contain" onError={(e) => e.target.src=placeholderImg} />
-                    </div>
-                    <div className="p-4 flex-grow flex flex-col">
-                        <h3 className="text-md font-semibold text-gray-800 dark:text-white truncate" title={item.itemName}>{item.itemName}</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">{item.brand || 'No Brand'}</p>
-                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-2 mb-2">UPC: {item.upc}</p>
-                        <div className="mt-auto pt-2 border-t border-gray-200 dark:border-gray-700 space-y-1">
-                            <p className="text-lg text-green-600 dark:text-green-400 font-bold">{priceText}</p>
-                            <p className="text-sm text-gray-600 dark:text-gray-300">Inventory: <span className="font-medium">{item.availableInventory || 0}</span></p>
+                    <div className="mt-4 space-y-1 px-1">
+                        <p className="text-[9px] font-black text-brand-gold uppercase tracking-[0.2em] truncate">{item.brand || 'Retailer Selection'}</p>
+                        <h3 className="text-xs font-bold text-brand-900 dark:text-white line-clamp-2 leading-snug h-8">{item.itemName}</h3>
+                        <div className="pt-3 flex items-end justify-between">
+                            <span className="text-sm font-black text-brand-900 dark:text-brand-gold">{priceText}</span>
+                            <span className={`text-[9px] font-black uppercase tracking-tighter ${item.availableInventory > 10 ? 'text-emerald-500' : 'text-rose-500'}`}>{item.availableInventory || 0} units</span>
                         </div>
                     </div>
                 </div>
@@ -1101,360 +577,256 @@
         
         function PaginationControls({ currentPage, onPageChange, lastFetchCount, itemsPerPage }) {
             return (
-                <div className="mt-10 flex justify-center items-center space-x-2">
-                    <button onClick={() => onPageChange('prev')} disabled={currentPage === 1} className="px-3 py-1 rounded-md text-sm font-medium bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors border border-gray-300 dark:border-gray-600">&laquo; Prev</button>
-                    <span className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400">Page {currentPage}</span>
-                    <button onClick={() => onPageChange('next')} disabled={lastFetchCount < itemsPerPage} className="px-3 py-1 rounded-md text-sm font-medium bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors border border-gray-300 dark:border-gray-600">Next &raquo;</button>
-                </div>
-            );
-        }
-        
-        function EnlargedImage({ src, onClose }) {
-            return (
-                <div onClick={onClose} className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-                    <img src={src} className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl" />
+                <div className="mt-12 flex justify-center items-center gap-4">
+                    <button onClick={() => onPageChange('prev', currentPage-1)} disabled={currentPage === 1} className="w-10 h-10 rounded-xl glass flex items-center justify-center text-brand-900 dark:text-white disabled:opacity-20 hover:scale-110 transition-all shadow-md">&larr;</button>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-brand-500">Page {currentPage}</span>
+                    <button onClick={() => onPageChange('next', currentPage+1)} disabled={lastFetchCount < itemsPerPage} className="w-10 h-10 rounded-xl glass flex items-center justify-center text-brand-900 dark:text-white disabled:opacity-20 hover:scale-110 transition-all shadow-md">&rarr;</button>
                 </div>
             );
         }
 
         function ItemModal({ item, onClose }) {
-            const [isImageEnlarged, setIsImageEnlarged] = useState(false);
-            const price = parseFloat(item.askingPrice);
-            const priceText = !isNaN(price) && price >= 0 ? '$' + price.toFixed(2) : 'N/A';
-            const msrp = parseFloat(item.msrp);
-            const msrpText = !isNaN(msrp) && msrp >= 0 ? '$' + msrp.toFixed(2) : null;
-            const placeholderImg = 'https://i.imgur.com/IUBzxFv.jpeg';
-            const imageUrl = item.imageUrl || placeholderImg;
-
-            useEffect(() => {
-                const handleEsc = (event) => {
-                   if (event.keyCode === 27) {
-                        onClose();
-                   }
-                };
-                window.addEventListener('keydown', handleEsc);
-                return () => window.removeEventListener('keydown', handleEsc);
-            }, [onClose]);
-
+            const [enlarge, setEnlarge] = useState(false);
+            const imageUrl = item.imageUrl || 'https://i.imgur.com/IUBzxFv.jpeg';
+            const msrpValue = Number(item.msrp);
+            const hasMsrp = msrpValue && msrpValue > 0;
             return (
-                <>
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 dark:bg-gray-900/75 backdrop-blur-sm">
-                        <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col relative">
-                            <button onClick={onClose} className="absolute top-3 right-3 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white z-10">
-                                <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                            </button>
-                            <div className="overflow-y-auto">
-                               <div className="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div className="md:col-span-1">
-                                        <div className="aspect-square bg-white rounded-lg flex items-center justify-center p-2 shadow-md cursor-pointer" onClick={() => setIsImageEnlarged(true)}>
-                                            <img src={imageUrl} alt={item.itemName} className="max-w-full max-h-full object-contain" onError={(e) => e.target.src=placeholderImg} />
-                                        </div>
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-brand-900/60 backdrop-blur-md">
+                    <div className="bg-white dark:bg-brand-900 w-full max-w-5xl rounded-[3rem] shadow-2xl overflow-hidden relative border border-white/10">
+                        <button onClick={onClose} className="absolute top-6 right-6 p-2 rounded-full hover:bg-brand-100 dark:hover:bg-brand-800 text-brand-500 transition-colors z-20">
+                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                        <div className="flex flex-col lg:flex-row h-full max-h-[85vh] overflow-y-auto">
+                            <div className="lg:w-1/2 p-12 bg-white flex items-center justify-center">
+                                <img src={imageUrl} className="max-w-full max-h-full object-contain hover:scale-105 cursor-zoom-in transition-all" onClick={() => setEnlarge(true)} />
+                            </div>
+                            <div className="lg:w-1/2 p-12 lg:border-l border-brand-100 dark:border-brand-800 dark:text-white space-y-8">
+                                <div className="space-y-2">
+                                    <div className="flex gap-2">
+                                        {Array.isArray(item.specialTag) && item.specialTag.map(t => <span key={t} className={`${tagColorMap[t] || 'bg-brand-500'} text-[10px] font-black uppercase px-3 py-1 rounded-full shadow-sm`}>{t}</span>)}
                                     </div>
-                                    <div className="md:col-span-2">
-                                        {/* UPDATED: Multi-tag display logic */}
-                                        <div className="flex items-center flex-wrap gap-2 mb-2">
-                                          {Array.isArray(item.specialTag) && item.specialTag.map(tag => {
-                                            const tagColor = tagColorMap[tag] || 'bg-gray-500 text-white';
-                                            return (
-                                              <div key={tag} className={`${tagColor} text-xs font-bold px-3 py-1 rounded-full`}>
-                                                {tag}
-                                              </div>
-                                            );
-                                          })}
+                                    <h2 className="text-3xl font-black text-brand-900 dark:text-white leading-tight">{item.itemName}</h2>
+                                    <p className="text-brand-gold text-lg font-bold tracking-widest uppercase">{item.brand || 'Retail Signature'}</p>
+                                </div>
+                                <div className={`grid ${hasMsrp ? 'grid-cols-2' : 'grid-cols-1'} gap-6 p-8 rounded-3xl bg-brand-50 dark:bg-brand-800/50`}>
+                                    <div>
+                                        <p className="text-[10px] font-bold text-brand-400 uppercase tracking-widest mb-1">Partner Price</p>
+                                        <p className="text-4xl font-black text-emerald-500">${Number(item.askingPrice).toFixed(2)}</p>
+                                    </div>
+                                    {hasMsrp && (
+                                        <div>
+                                            <p className="text-[10px] font-bold text-brand-400 uppercase tracking-widest mb-1">Retail MSRP</p>
+                                            <p className="text-2xl font-bold text-brand-400 line-through">${msrpValue.toFixed(2)}</p>
                                         </div>
-                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{item.itemName || 'N/A'}</h2>
-                                        {item.brand && <p className="text-md text-gray-500 dark:text-gray-400 mb-4">by {item.brand}</p>}
-                                        <div className="bg-gray-100/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-4">
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-lg font-medium text-gray-700 dark:text-gray-300">Price:</span>
-                                                <span className="text-2xl font-bold text-green-600 dark:text-green-400">{priceText}</span>
-                                            </div>
-                                            {msrpText && (
-                                                <div className="flex justify-between items-center mt-2">
-                                                    <span className="text-lg font-medium text-gray-700 dark:text-gray-300">MSRP:</span>
-                                                    <span className="text-xl font-semibold text-gray-800 dark:text-gray-200">{msrpText}</span>
-                                                </div>
-                                            )}
-                                            <div className="flex justify-between items-center mt-2">
-                                                <span className="text-lg font-medium text-gray-700 dark:text-gray-300">Available Inventory:</span>
-                                                <span className="text-xl font-semibold text-gray-800 dark:text-gray-200">{item.availableInventory || 0}</span>
-                                            </div>
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm mb-4">
-                                            <p><strong className="font-semibold text-gray-700 dark:text-gray-300">SKU:</strong> <span className="text-gray-500 dark:text-gray-400 font-mono">{item.sku || 'N/A'}</span></p>
-                                            <p><strong className="font-semibold text-gray-700 dark:text-gray-300">UPC:</strong> <span className="text-gray-500 dark:text-gray-400 font-mono">{item.upc || 'N/A'}</span></p>
-                                            {item.size && <p><strong className="font-semibold text-gray-700 dark:text-gray-300">Size:</strong> <span className="text-gray-500 dark:text-gray-400">{item.size}</span></p>}
-                                            {item.gender && <p><strong className="font-semibold text-gray-700 dark:text-gray-300">Gender:</strong> <span className="text-gray-500 dark:text-gray-400">{item.gender}</span></p>}
-                                            {item.type && <p><strong className="font-semibold text-gray-700 dark:text-gray-300">Type:</strong> <span className="text-gray-500 dark:text-gray-400">{item.type}</span></p>}
-                                            {item.category && <p><strong className="font-semibold text-gray-700 dark:text-gray-300">Category:</strong> <span className="text-gray-500 dark:text-gray-400">{item.category}</span></p>}
-                                            {item.subCategory && <p><strong className="font-semibold text-gray-700 dark:text-gray-300">Sub-Category:</strong> <span className="text-gray-500 dark:text-gray-400">{item.subCategory}</span></p>}
-                                            {item.asin && <p><strong className="font-semibold text-gray-700 dark:text-gray-300">ASIN:</strong> <span className="text-gray-500 dark:text-gray-400 font-mono">{item.asin}</span></p>}
-                                        </div>
-                                        {item.description && <p className="text-sm text-gray-600 dark:text-gray-400">{item.description}</p>}
+                                    )}
+                                </div>
+                                <div className="grid grid-cols-2 gap-x-4 gap-y-6 text-[11px] border-t border-brand-100 dark:border-brand-800 pt-8">
+                                    <div className="space-y-1"><p className="text-brand-400 uppercase font-black tracking-tighter">SKU Reference</p><p className="font-bold font-mono">{item.sku}</p></div>
+                                    <div className="space-y-1"><p className="text-brand-400 uppercase font-black tracking-tighter">GTIN / UPC</p><p className="font-bold font-mono">{item.upc}</p></div>
+                                    <div className="space-y-1"><p className="text-brand-400 uppercase font-black tracking-tighter">Product Spec</p><p className="font-bold">{item.size || 'Standard'}</p></div>
+                                    <div className="space-y-1"><p className="text-brand-400 uppercase font-black tracking-tighter">Gender</p><p className="font-bold">{item.gender || 'Universal'}</p></div>
+                                    <div className="space-y-1"><p className="text-brand-400 uppercase font-black tracking-tighter">Type</p><p className="font-bold">{item.type || item.subCategory || 'General'}</p></div>
+                                    <div className="space-y-1"><p className="text-brand-400 uppercase font-black tracking-tighter">Availability</p><p className={`font-bold ${item.availableInventory > 0 ? 'text-emerald-500' : 'text-rose-500'}`}>{item.availableInventory} Units Ready</p></div>
+                                </div>
+                                {item.description && (
+                                    <div className="space-y-2 border-t border-brand-100 dark:border-brand-800 pt-6">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-brand-400">Detailed Description</p>
+                                        <p className="text-xs text-brand-600 dark:text-brand-300 leading-relaxed italic">{item.description}</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    {enlarge && <div className="fixed inset-0 z-[70] bg-black/95 flex items-center justify-center p-4 cursor-zoom-out" onClick={() => setEnlarge(false)}><img src={imageUrl} className="max-w-[95vw] max-h-[95vh] object-contain" /></div>}
+                </div>
+            );
+        }
+
+        function ApiDocs() {
+            const URL = "https://lntwholesale-api-975989212115.us-central1.run.app";
+            return (
+                <div className="glass p-10 rounded-[2.5rem] shadow-xl space-y-12 border-white/20 dark:text-brand-300">
+                    <div className="space-y-4">
+                        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-gold">Integration Hub</p>
+                        <h2 className="text-4xl font-black text-brand-900 dark:text-white tracking-tight">API Documentation</h2>
+                        <p className="max-w-3xl text-sm leading-relaxed text-brand-600 dark:text-brand-400">Programmatic synchronization with the Lord & Taylor inventory manifest. High-availability secured endpoints for enterprise ERP integration.</p>
+                    </div>
+                    <div className="grid lg:grid-cols-2 gap-12">
+                        <div className="space-y-10">
+                            <section className="space-y-4">
+                                <h3 className="text-sm font-black uppercase tracking-widest text-brand-900 dark:text-white border-b-2 border-brand-gold w-max pb-1">Authentication</h3>
+                                <p className="text-xs">Secure Bearer token authorization required for all endpoints.</p>
+                                <div className="bg-brand-900 p-5 rounded-2xl shadow-inner border border-white/5"><code className="text-brand-gold font-mono text-xs">Authorization: Bearer [ACCESS_TOKEN]</code></div>
+                            </section>
+                            <section className="space-y-4">
+                                <h3 className="text-sm font-black uppercase tracking-widest text-brand-900 dark:text-white border-b-2 border-brand-gold w-max pb-1">Endpoints & Parameters</h3>
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-4 bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl"><span className="px-2 py-0.5 bg-emerald-500 text-white text-[9px] font-black rounded uppercase">GET</span><code className="text-emerald-600 dark:text-emerald-400 font-bold text-xs">{URL}/</code></div>
+                                    <div className="overflow-hidden rounded-xl border border-brand-100 dark:border-brand-800">
+                                        <table className="w-full text-left text-[11px]"><thead className="bg-brand-50 dark:bg-brand-800/50"><tr><th className="p-3 font-black uppercase">Parameter</th><th className="p-3 font-black uppercase">Description</th></tr></thead>
+                                            <tbody className="divide-y divide-brand-100 dark:divide-brand-800">
+                                                <tr><td className="p-3 font-mono text-brand-gold">page</td><td className="p-3">Current offset (def: 1)</td></tr>
+                                                <tr><td className="p-3 font-mono text-brand-gold">limit</td><td className="p-3">Results per batch (max: 250)</td></tr>
+                                                <tr><td className="p-3 font-mono text-brand-gold">sku/upc</td><td className="p-3">Direct resource filtering</td></tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                            </div>
+                            </section>
+                            <section className="space-y-4">
+                                <h3 className="text-sm font-black uppercase tracking-widest text-brand-900 dark:text-white border-b-2 border-brand-gold w-max pb-1">Rate Limits</h3>
+                                <div className="p-5 rounded-xl bg-brand-50 dark:bg-brand-800/30 border border-brand-100 dark:border-brand-800"><p className="text-xs">Capacity: 300 requests per sliding 24-hour window.</p></div>
+                            </section>
                         </div>
-                    </div>
-                    {isImageEnlarged && <EnlargedImage src={imageUrl} onClose={() => setIsImageEnlarged(false)} />}
-                </>
-            );
-        }
-
-        // --- Confirmation Modal ---
-        function ConfirmationModal({ show, onClose, onConfirm, title, children }) {
-            if (!show) {
-                return null;
-            }
-
-            return (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 dark:bg-gray-900/75 backdrop-blur-sm">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md border border-gray-200 dark:border-gray-700">
-                        <div className="p-6">
-                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{title}</h3>
-                            <div className="mt-2 text-gray-600 dark:text-gray-400">
-                                {children}
-                            </div>
-                        </div>
-                        <div className="bg-gray-100 dark:bg-gray-800/50 px-6 py-4 flex justify-end space-x-3 rounded-b-lg">
-                            <button onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-                                Cancel
-                            </button>
-                            <button onClick={onConfirm} className="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 transition-colors">
-                                Confirm
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-
-        // --- API Docs Component (omitted for brevity, same as original) ---
-        function ApiDocs() {
-            const API_URL = "https://lntwholesale-api-975989212115.us-central1.run.app";
-
-            return (
-                <div className="bg-white/70 dark:bg-gray-800/60 backdrop-blur-lg p-6 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">API Documentation</h2>
-                    <p className="mb-6">Use our API to integrate your system with our live product database. All requests must be authenticated using your private API key.</p>
-
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-2">Authentication</h3>
-                    <p className="mb-4">Include your API key in the <code className="text-teal-600 dark:text-teal-400">Authorization</code> header for every request. You can generate and manage your key in the "Manage API Key" tab.</p>
-                    <pre className="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-700"><code>Authorization: Bearer YOUR_API_KEY</code></pre>
-
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-2">Base URL</h3>
-                    <pre className="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-700"><code>{API_URL}</code></pre>
-
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-2">Endpoints & Parameters</h3>
-                    <div className="space-y-6">
-                        <div>
-                            <p className="font-mono text-lg"><span className="font-bold text-green-600 dark:text-green-400">GET</span> /</p>
-                            <p className="ml-4 mt-1">Returns a paginated list of products. You can filter by SKU or UPC.</p>
-                            <ul className="list-disc ml-10 mt-2 space-y-1 text-sm">
-                                <li><code className="text-gray-600 dark:text-gray-400">page</code> (optional, default: 1) - The page number to retrieve.</li>
-                                <li><code className="text-gray-600 dark:text-gray-400">limit</code> (optional, default: 250, max: 250) - The number of items to return per page.</li>
-                                <li><code className="text-gray-600 dark:text-gray-400">sku</code> (optional) - Filter results for a single product by its SKU.</li>
-                                <li><code className="text-gray-600 dark:text-gray-400">upc</code> (optional) - Filter results for a single product by its UPC.</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-2">Response Format</h3>
-                    <p className="mb-4">All successful requests will return a JSON object with `meta` and `data` keys.</p>
-                    <pre className="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-700"><code>
+                        <div className="space-y-8">
+                             <section className="space-y-4"><h3 className="text-sm font-black uppercase tracking-widest text-brand-900 dark:text-white border-b-2 border-brand-gold w-max pb-1">Response Format</h3><div className="rounded-2xl bg-brand-900 overflow-hidden border border-white/5 shadow-xl"><div className="bg-white/5 px-4 py-2 border-b border-white/5 flex justify-between"><span className="text-[10px] font-bold text-brand-300 uppercase">application/json</span></div><pre className="p-5 text-[11px] font-mono text-brand-300 overflow-x-auto leading-relaxed">
 {`{
-    "meta": {
-        "total": 1287,
-        "current_page": 1,
-        "total_pages": 6,
-        "per_page": 250,
-        "rate_limit_remaining": 299
-    },
-    "data": [
-        {
-            "sku": "12345",
-            "upc": "012345678901",
-            "itemName": "Example Perfume",
-            "brand": "Designer Brand",
-            "size": "100ml",
-            "asin": "B08X44T43G",
-            "msrp": 95.00,
-            "category": "Fragrance",
-            "availableInventory": 150,
-            "askingPrice": 75.99
-        },
-        ...
-    ]
-}`}
-                    </code></pre>
-
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-2">Rate Limits</h3>
-                    <p className="mb-4">You may call this endpoint up to 300 times per 24-hour period per token. Additional requests will receive a `429 Too Many Requests` error.</p>
-                    
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-2">Example Request (cURL)</h3>
-                    <pre className="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-700"><code>
-{`# Get page 2 with 50 items per page
-curl -L -X GET "${API_URL}?page=2&limit=50" \\
-      -H "Authorization: Bearer YOUR_API_KEY"`}
-                    </code></pre>
+  "meta": {
+    "total": 1287,
+    "current_page": 1,
+    "total_pages": 6,
+    "rate_limit_remaining": 299
+  },
+  "data": [
+    {
+      "sku": "LT-FR-1029",
+      "upc": "012345678901",
+      "itemName": "Collection Fragrance",
+      "brand": "Designer House",
+      "size": "100ml",
+      "asin": "B08X44T43G",
+      "msrp": 95.00,
+      "category": "Fragrance",
+      "availableInventory": 150,
+      "askingPrice": 75.99
+    }
+  ]
+}`}</pre></div></section>
+                            <section className="space-y-4"><h3 className="text-sm font-black uppercase tracking-widest text-brand-900 dark:text-white border-b-2 border-brand-gold w-max pb-1">Example cURL</h3><div className="rounded-2xl bg-brand-900 overflow-hidden border border-white/5 shadow-xl"><pre className="p-5 text-[11px] font-mono text-brand-gold leading-relaxed whitespace-pre-wrap">
+{`curl -X GET "${URL}/?page=1&limit=50" \\
+     -H "Authorization: Bearer YOUR_TOKEN"`}</pre></div></section>
+                        </div>
+                    </div>
                 </div>
             );
         }
 
-        // --- API Key Manager Component (omitted for brevity, same as original) ---
         function ApiKeyManager({ user }) {
             const [apiKey, setApiKey] = useState(null);
             const [loading, setLoading] = useState(true);
-            const [error, setError] = useState('');
             const [showKey, setShowKey] = useState(false);
-            const [logs, setLogs] = useState([]);
             const [usage, setUsage] = useState({ count: 0, limit: 300 });
-            const [showConfirmModal, setShowConfirmModal] = useState(false);
+            const [logs, setLogs] = useState([]);
+            const [copySuccess, setCopySuccess] = useState(false);
 
             useEffect(() => {
-                const fetchApiKeyData = async () => {
-                    if (!user) return;
-                    setError('');
+                const fetchKeyData = async () => {
                     try {
-                        const userRef = db.collection('users').doc(user.uid);
-                        const doc = await userRef.get();
-                        
+                        const doc = await db.collection('users').doc(user.uid).get();
                         if (doc.exists && doc.data().apiKey) {
-                            const currentApiKey = doc.data().apiKey;
-                            setApiKey(currentApiKey);
-
-                            const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-                            const logsQuery = db.collection('apiLogs')
-                                .where('userId', '==', user.uid)
-                                .where('apiKey', '==', currentApiKey)
-                                .where('timestamp', '>=', twentyFourHoursAgo);
-                            
-                            const logSnapshot = await logsQuery.get();
-                            setUsage(prev => ({ ...prev, count: logSnapshot.size }));
-                            
-                            const recentLogsQuery = logsQuery.orderBy('timestamp', 'desc').limit(10);
-                            const recentLogSnapshot = await recentLogsQuery.get();
-                            setLogs(recentLogSnapshot.docs.map(d => d.data()));
+                            const currentKey = doc.data().apiKey;
+                            setApiKey(currentKey);
+                            const logSnap = await db.collection('apiLogs').where('userId', '==', user.uid).orderBy('timestamp', 'desc').limit(10).get();
+                            setLogs(logSnap.docs.map(d => d.data()));
+                            const countSnap = await db.collection('apiLogs').where('userId', '==', user.uid).get();
+                            setUsage({ count: countSnap.size, limit: 300 });
                         }
-                    } catch (err) {
-                        console.error("Error fetching API data:", err);
-                        setError('Could not fetch API key and usage data.');
-                    } finally {
-                        setLoading(false);
-                    }
+                    } catch(e) { console.error(e); } finally { setLoading(false); }
                 };
-
-                fetchApiKeyData();
+                fetchKeyData();
             }, [user]);
 
-            const handleGenerateClick = () => {
-                setShowConfirmModal(true);
+            const copyToClipboard = () => {
+                const el = document.createElement('textarea');
+                el.value = apiKey;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                setCopySuccess(true);
+                setTimeout(() => setCopySuccess(false), 2000);
             };
 
-            const confirmGenerateNewKey = async () => {
-                setShowConfirmModal(false);
+            const generate = async () => {
+                if (!window.confirm("Warning: Revoking the current token will immediately disconnect active partner integrations. Proceed?")) return;
                 setLoading(true);
-                setError('');
-                const newKey = 'wh_live_' + [...Array(32)].map(() => Math.random().toString(36)[2]).join('');
-                
+                const key = 'lt_live_' + Math.random().toString(36).substr(2, 32);
                 try {
-                    const userRef = db.collection('users').doc(user.uid);
-                    if(apiKey) {
-                        await db.collection('apiKeys').doc(apiKey).delete();
-                    }
-                    await userRef.set({ apiKey: newKey }, { merge: true });
-                    await db.collection('apiKeys').doc(newKey).set({ userId: user.uid, createdAt: new Date() });
-                    setApiKey(newKey);
+                    await db.collection('users').doc(user.uid).set({ apiKey: key }, { merge: true });
+                    await db.collection('apiKeys').doc(key).set({ userId: user.uid, createdAt: new Date() });
+                    setApiKey(key);
                     setShowKey(true);
-                    setLogs([]);
-                    setUsage({ count: 0, limit: 300 });
-                } catch (err) {
-                    setError('Failed to generate new key. Please try again.');
-                    console.error(err);
-                } finally {
-                    setLoading(false);
-                }
+                } finally { setLoading(false); }
             };
 
-            if (loading) return <div className="flex justify-center mt-8"><div className="loader"></div></div>;
+            if (loading) return <div className="flex justify-center py-20"><div className="loader"></div></div>;
 
             return (
-                <>
-                    <ConfirmationModal
-                        show={showConfirmModal}
-                        onClose={() => setShowConfirmModal(false)}
-                        onConfirm={confirmGenerateNewKey}
-                        title="Generate New API Key?"
-                    >
-                        <p>Are you sure? This will invalidate your old key immediately. Any application using the current key will stop working.</p>
-                    </ConfirmationModal>
-                    <div className="bg-white/70 dark:bg-gray-800/60 backdrop-blur-lg p-6 rounded-xl border border-gray-200 dark:border-gray-700">
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Manage API Key</h2>
-                        <p className="text-gray-600 dark:text-gray-400 mb-6">Use this key to authenticate your requests to our API. Keep it confidential.</p>
-                        {error && <p className="text-red-500 dark:text-red-400 mb-4">{error}</p>}
-                        {apiKey ? (
-                            <div>
-                                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Your API Key</label>
-                                <div className="flex items-center space-x-2">
-                                    <div className="flex-grow p-4 rounded-lg font-mono text-gray-800 dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
-                                        {showKey ? apiKey : '************************************'}
-                                    </div>
-                                    <button onClick={() => setShowKey(!showKey)} title={showKey ? 'Hide key' : 'Show key'} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-500 dark:text-gray-400">
-                                        {showKey ? (
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" /></svg>
-                                        ) : (
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                                        )}
-                                    </button>
-                                </div>
-                                 <div className="mt-6">
-                                      <h3 className="text-lg font-medium text-gray-900 dark:text-white">Usage (Last 24 Hours)</h3>
-                                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-2">
-                                          <div className="bg-indigo-600 h-2.5 rounded-full" style={{ width: `${(usage.count / usage.limit) * 100}%` }}></div>
-                                      </div>
-                                      <p className="text-right text-sm text-gray-500 dark:text-gray-400 mt-1">{usage.count} / {usage.limit} calls</p>
-                                  </div>
+                <div className="glass p-10 rounded-[2.5rem] shadow-xl border-white/20 dark:text-brand-300 max-w-4xl mx-auto">
+                    <div className="space-y-3 mb-10 text-center">
+                        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-gold">Access Management</p>
+                        <h2 className="text-3xl font-black text-brand-900 dark:text-white tracking-tight">Partner Credentials</h2>
+                    </div>
 
-                                  <div className="mt-6">
-                                      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Recent API Calls</h3>
-                                      {logs.length > 0 ? (
-                                          <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-                                              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                                  <thead className="bg-gray-50 dark:bg-gray-900/50">
-                                                      <tr><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Timestamp</th></tr>
-                                                  </thead>
-                                                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                                      {logs.map((log, index) => (
-                                                          <tr key={index}>
-                                                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">{new Date(log.timestamp.seconds * 1000).toLocaleString()}</td>
-                                                          </tr>
-                                                      ))}
-                                                  </tbody>
-                                              </table>
-                                          </div>
-                                      ) : (
-                                          <p className="text-gray-500 dark:text-gray-500 text-sm">No recent API calls in the last 24 hours.</p>
-                                      )}
-                                  </div>
-                                <div className="bg-yellow-100/50 dark:bg-yellow-900/50 border border-yellow-400 dark:border-yellow-700 text-yellow-800 dark:text-yellow-300 text-sm rounded-md p-3 mt-6">
-                                    <strong>Warning:</strong> If you generate a new key, your old key will be immediately revoked. Ensure you update any applications using the old key.
+                    <div className="space-y-10">
+                        {apiKey ? (
+                            <div className="space-y-8">
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-brand-500">Live API Production Token</label>
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex-grow p-5 bg-brand-900 dark:bg-brand-800 rounded-[1.5rem] font-mono text-brand-gold text-sm overflow-hidden whitespace-nowrap border border-white/5 shadow-inner">
+                                            {showKey ? apiKey : '••••••••••••••••••••••••••••••••'}
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <button onClick={() => setShowKey(!showKey)} className="p-5 rounded-[1.5rem] border border-brand-200 hover:bg-brand-50 transition-all shadow-sm">
+                                                {showKey ? <EyeOffIcon /> : <EyeIcon />}
+                                            </button>
+                                            <button onClick={copyToClipboard} className="p-5 rounded-[1.5rem] border border-brand-200 hover:bg-brand-50 transition-all shadow-sm relative">
+                                                <CopyIcon />
+                                                {copySuccess && <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-brand-900 text-white text-[10px] font-black rounded-lg shadow-xl">Copied!</span>}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="p-8 bg-brand-50 dark:bg-brand-800/30 rounded-[2rem] border border-brand-100 dark:border-brand-700">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-900 dark:text-white">Daily Consumption Quota</h4>
+                                        <span className="text-[10px] font-black text-brand-gold">{usage.count} / {usage.limit} Calls</span>
+                                    </div>
+                                    <div className="h-2 bg-brand-200 dark:bg-brand-900 rounded-full overflow-hidden">
+                                        <div className="h-full bg-brand-gold transition-all duration-700" style={{ width: `${(usage.count / usage.limit) * 100}%` }}></div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-500">Recent API Access Activity</h4>
+                                    <div className="rounded-2xl border border-brand-100 dark:border-brand-800 overflow-hidden shadow-sm">
+                                        <table className="w-full text-[11px] text-left"><thead className="bg-brand-50 dark:bg-brand-800/50"><tr><th className="p-3 font-black uppercase">Timestamp</th><th className="p-3 font-black uppercase">Operation</th></tr></thead>
+                                            <tbody className="divide-y divide-brand-100 dark:divide-brand-800">
+                                                {logs.length ? logs.map((l, i) => (
+                                                    <tr key={i}><td className="p-3 font-mono">{new Date(l.timestamp?.seconds * 1000).toLocaleString()}</td><td className="p-3">Synchronize Manifest Resource</td></tr>
+                                                )) : <tr><td colSpan="2" className="p-6 text-center text-brand-400 uppercase text-[9px] font-bold">No telemetry identified for the current token</td></tr>}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         ) : (
-                            <div className="text-center p-6 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg">
-                                <p className="text-gray-500 dark:text-gray-400">You have not generated an API key yet.</p>
+                            <div className="p-16 border-2 border-dashed border-brand-200 dark:border-brand-800 rounded-[2.5rem] text-center bg-brand-50 dark:bg-brand-900/10">
+                                <p className="text-brand-500 text-xs font-bold uppercase tracking-widest">No production tokens generated for this profile</p>
                             </div>
                         )}
-                        <button onClick={handleGenerateClick} disabled={loading} className="mt-6 inline-flex items-center px-6 py-3 rounded-lg border border-transparent bg-red-600 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 transition-colors">
-                            {loading ? 'Generating...' : (apiKey ? 'Revoke and Generate New Key' : 'Generate API Key')}
-                        </button>
+                        <div className="text-center space-y-6 pt-4">
+                            <button onClick={generate} className="px-10 py-5 rounded-[1.5rem] bg-brand-900 dark:bg-brand-gold text-white dark:text-brand-900 font-black uppercase tracking-widest text-xs hover:shadow-2xl transition-all">
+                                {apiKey ? 'Revoke and Generate New Key' : 'Initialize Partner API Key'}
+                            </button>
+                        </div>
                     </div>
-                </>
+                </div>
             );
         }
 
-        const container = document.getElementById('root');
-        const root = ReactDOM.createRoot(container);
+        const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>
