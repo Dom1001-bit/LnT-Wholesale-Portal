@@ -267,8 +267,8 @@
                             </div>
                         </div>
                         <form onSubmit={handleSubmit} className="space-y-4">
-                            <input type="email" placeholder="Business Email" value={email} onChange={e => setEmail(e.target.value)} required className="w-full p-4 rounded-2xl bg-brand-50 dark:bg-brand-800 border border-brand-200 dark:border-brand-700 dark:text-white outline-none focus:ring-2 focus:ring-brand-gold/30 transition-all text-sm" />
-                            <input type="password" placeholder="Access Key" value={password} onChange={e => setPassword(e.target.value)} required className="w-full p-4 rounded-2xl bg-brand-50 dark:bg-brand-800 border border-brand-200 dark:border-brand-700 dark:text-white outline-none focus:ring-2 focus:ring-brand-gold/30 transition-all text-sm" />
+                            <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required className="w-full p-4 rounded-2xl bg-brand-50 dark:bg-brand-800 border border-brand-200 dark:border-brand-700 dark:text-white outline-none focus:ring-2 focus:ring-brand-gold/30 transition-all text-sm" />
+                            <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required className="w-full p-4 rounded-2xl bg-brand-50 dark:bg-brand-800 border border-brand-200 dark:border-brand-700 dark:text-white outline-none focus:ring-2 focus:ring-brand-gold/30 transition-all text-sm" />
                             {error && <p className="text-rose-500 text-[10px] text-center font-bold uppercase p-2">{error}</p>}
                             <button type="submit" disabled={loading} className="w-full py-4 rounded-2xl bg-brand-900 dark:bg-brand-gold text-white dark:text-brand-900 font-black uppercase tracking-widest text-xs hover:shadow-xl transition-all disabled:opacity-50">
                                 {loading ? 'Authorizing...' : (isLogin ? 'Enter Portal' : 'Register')}
